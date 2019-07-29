@@ -20,7 +20,6 @@ app.get("/",function(req, res) {
         //console.log('body:', body); //Print the API data
         if(!error) {
             var parsedData = JSON.parse(body);
-            //console.log('image url:', parsedData["urls"]["regular"]);
             var imageURL = parsedData["urls"]["regular"];
             res.render("index", {"imageURL":imageURL});
         } else {
@@ -30,8 +29,27 @@ app.get("/",function(req, res) {
 
 });
 
+
 app.get("/search",function(req, res) {
-    res.send("hi!");
+    var keyword = req.query.keyword;
+
+    requestURL = "https://api.unsplash.com/photos/random/?count=" + 
+        "9&client_id=2166af60ef637498aad08ce472f5f3d1bf7afd3e7c8039bcd7c7b313ea0729f7" +
+        "&query=" + keyword;
+    request(requestURL, function(error,response,body) {
+        if(!error) {
+            var parsedData = JSON.parse(body);
+            var imageURLs = [];
+            for(let i = 0 ; i < 9 ; i++) {
+                var imageURL = parsedData[i].urls.regular;
+                imageURLs.push(imageURL);
+            }
+            res.render("results", {"imageURLs": imageURLs, "keyword": keyword});
+        } else {
+            res.render("results", {"error":"Unable to access API"});
+        }
+    });
+
 });
 
 //listener
