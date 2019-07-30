@@ -13,6 +13,22 @@ $(document).ready(function() {
         }
     });
 
+    $(".keywordLink").on("click", function() {
+        $.ajax({
+            method: "get",
+            url: "/api/displayFavorites",
+            data: {
+                "keyword" : $(this).text().trim()
+                },
+                success: function(rows, status) {
+                    $("#favorites").html("");
+                    rows.forEach(function(row) {
+                        $("#favorites").append("<img width = '200' height='200' src='" + row.imageURL + "'>'");
+                    });
+                }
+        });//ajax
+    });
+
     function updateFavorite(action, imageURL) {
         $.ajax({
             method: "get",

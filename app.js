@@ -25,6 +25,38 @@ app.get("/search",async function(req, res) {
     res.render("results", {"imageURLs": imageURLs, "keyword": keyword}); 
 });
 
+
+app.get("/displayKeywords",async function(req, res) {
+    var sql;
+    var sqlParams;
+    var conn = tools.createConnection();
+    sql = "SELECT DISTINCT keyword from favorites order by keyword";
+    conn.connect(function(err) {
+        if(err) throw(err);
+            conn.query(sql,function(err,results) {
+                if(err) throw(err);
+                res.render("favorites", {"rows":results});
+        });
+    });
+});
+
+app.get("/api/displayFavorites",async function(req, res) {
+    var keyword = req.query.keyword;
+    var sql;
+    var sqlParams;
+    var conn = tools.createConnection();
+    sql = "SELECT imageURL from favorites where keyword=?";
+    sqlParams = [keyword];
+    conn.connect(function(err) {
+        if(err) throw(err);
+            conn.query(sql,sqlParams,function(err,results) {
+                if(err) throw(err);
+                res.send(results);
+        });
+    });
+});
+
+
 app.get("/api/updateFavorites",function(req, res) {
     var imageURL = req.query.imageURL;
     var keyword = req.query.keyword;
@@ -32,7 +64,7 @@ app.get("/api/updateFavorites",function(req, res) {
 
     var sql;
     var sqlParams;
-    var conn = mysql.createConnection({host:"localhost", user: "root", password:"3UaIr2cyEPJD81u", database: "img_gallery"});
+    var conn = tools.createConnection();
     if(action=="add") {
         sql = "INSERT INTO favorites (imageURL, keyword) VALUES(?,?)";
         sqlParams = [imageURL,keyword];

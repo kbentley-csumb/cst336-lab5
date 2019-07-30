@@ -1,4 +1,5 @@
 const request = require('request');
+const mysql = require('mysql');
 
 module.exports = {
 
@@ -52,6 +53,15 @@ getRandomImages: function (keyword, imageCount) {
             }
         });
     });
+},
+
+createConnection: function() {
+    var conn = mysql.createConnection({
+        host:"localhost", 
+        user: "root", 
+        password:"3UaIr2cyEPJD81u", 
+        database: "img_gallery"});
+    return conn;
 }
 
 
