@@ -28,13 +28,25 @@ app.get("/",function(req, res) {
     });
 
 });
-
+ 
 
 app.get("/search",function(req, res) {
     var keyword = req.query.keyword;
+    getRandomImages_cb(keyword,9,function(imageURLs){
+        console.log("imageURLs" , imageURLs);
+        res.render("results", {"imageURLs": imageURLs, "keyword": keyword});
+    });   
+});
 
+/**
+ * Return random image URLs from an API
+ * @param {*} keyword - Search Term
+ * @param {*} imageCount - number of images to return
+ */
+function getRandomImages_cb(keyword, imageCount, callback) {
     requestURL = "https://api.unsplash.com/photos/random/?count=" + 
-        "9&client_id=2166af60ef637498aad08ce472f5f3d1bf7afd3e7c8039bcd7c7b313ea0729f7" +
+        imageCount + 
+        "&client_id=2166af60ef637498aad08ce472f5f3d1bf7afd3e7c8039bcd7c7b313ea0729f7" +
         "&query=" + keyword;
     request(requestURL, function(error,response,body) {
         if(!error) {
@@ -42,15 +54,14 @@ app.get("/search",function(req, res) {
             var imageURLs = [];
             for(let i = 0 ; i < 9 ; i++) {
                 var imageURL = parsedData[i].urls.regular;
-                imageURLs.push(imageURL);
+                imageURLs.push(imageURL);                
             }
-            res.render("results", {"imageURLs": imageURLs, "keyword": keyword});
+            callback(imageURLs);
         } else {
-            res.render("results", {"error":"Unable to access API"});
+            console.log("results", {"error":"Unable to access API"});
         }
     });
-
-});
+}
 
 //listener
 app.listen('8081',"0.0.0.0", function() {
