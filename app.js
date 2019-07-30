@@ -7,61 +7,24 @@ app.use(express.static('public'));
 const request = require('request');
 const mysql = require('mysql');
 
+const tools = require("./tools.js")
 
 //routes
 
-app.get("/",function(req, res) {
-    //res.send("it's working")
-    //res.render("index.ejs");
-    requestURL = 'https://api.unsplash.com/photos/random/?client_id=2166af60ef637498aad08ce472f5f3d1bf7afd3e7c8039bcd7c7b313ea0729f7';
-    request(requestURL, function(error,response,body) {
-        //console.log('error:', error);
-        //console.log('statusCode:', response && response.statusCode);
-        //console.log('body:', body); //Print the API data
-        if(!error) {
-            var parsedData = JSON.parse(body);
-            var imageURL = parsedData["urls"]["regular"];
-            res.render("index", {"imageURL":imageURL});
-        } else {
-            res.render("error", {"imageURL":"Unable to access API"});
-        }
-    });
-
+app.get("/",async function(req, res) {
+    
+    var imageURLs = await tools.getRandomImages("",1);
+    res.render("index", {"imageURLs":imageURLs});
 });
  
 
-app.get("/search",function(req, res) {
+app.get("/search",async function(req, res) {
     var keyword = req.query.keyword;
-    getRandomImages_cb(keyword,9,function(imageURLs){
-        console.log("imageURLs" , imageURLs);
-        res.render("results", {"imageURLs": imageURLs, "keyword": keyword});
-    });   
+    var imageURLs = await tools.getRandomImages(keyword,9);
+    console.log("imageURLs" , imageURLs);
+    res.render("results", {"imageURLs": imageURLs, "keyword": keyword}); 
 });
 
-/**
- * Return random image URLs from an API
- * @param {*} keyword - Search Term
- * @param {*} imageCount - number of images to return
- */
-function getRandomImages_cb(keyword, imageCount, callback) {
-    requestURL = "https://api.unsplash.com/photos/random/?count=" + 
-        imageCount + 
-        "&client_id=2166af60ef637498aad08ce472f5f3d1bf7afd3e7c8039bcd7c7b313ea0729f7" +
-        "&query=" + keyword;
-    request(requestURL, function(error,response,body) {
-        if(!error) {
-            var parsedData = JSON.parse(body);
-            var imageURLs = [];
-            for(let i = 0 ; i < 9 ; i++) {
-                var imageURL = parsedData[i].urls.regular;
-                imageURLs.push(imageURL);                
-            }
-            callback(imageURLs);
-        } else {
-            console.log("results", {"error":"Unable to access API"});
-        }
-    });
-}
 
 //listener
 app.listen('8081',"0.0.0.0", function() {
