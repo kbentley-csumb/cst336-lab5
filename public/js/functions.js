@@ -23,7 +23,7 @@ $(document).ready(function() {
                 success: function(rows, status) {
                     $("#favorites").html("");
                     rows.forEach(function(row) {
-                        $("#favorites").append("<img width = '200' height='200' src='" + row.imageURL + "'>'");
+                        $("#favorites").append("<img class='image' width='200' height='200' src='" + row.imageURL + "'>'");
                     });
                 }
         });//ajax

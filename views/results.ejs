@@ -4,15 +4,18 @@
  <main>
 
 <form action="/search">
-    <input id="keyword" type="text" value="<%=keyword%>" placeholder="Type keyword" name="keyword"/> <br><br>
+    <input size="10" id="keyword" type="text" value="<%=keyword%>" placeholder="Type keyword" name="keyword"/> 
+    <br>
     <button>Search</button>
-    <a href="/displayKeywords">See Favorites</a>
+    <a id="favLink" href="/displayKeywords">See Favorites</a>
 </form>
 
 <% imageURLs.forEach(function(imageURL, i){ %>
     <%- (i%3==0)?'<br>':'' %>
-    <img class="image" src='<%=imageURL %>' width="200" height="200">
-    <img class="favoriteIcon" src="img/fav_off.png" width="20">
+    <div  class="imageContainer">
+        <img class="image" src='<%=imageURL %>' width="200" height="200">
+        <img class="favoriteIcon" src="img/fav_off.png" width="20">
+    </div>
  <% }) %>
 
 

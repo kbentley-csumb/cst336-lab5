@@ -1,9 +1,5 @@
 <% include partials/header.ejs %>
-<style>
-body {
-    background-image: url("<%=imageURLs[0]%>")
-}
-</style>
+
 </head>
 <body>
  <main>
@@ -11,8 +7,9 @@ body {
         Cool Images
     </h1>
     <form action="/search">
-        <input type="text" placeholder="Type keyword" name="keyword"/> <br><br>
+        <input size="15" type="text" placeholder="Type keyword" name="keyword"/> <br><br>
         <button>Search</button>
+        <br><br>
 
     </form>
 

@@ -11,8 +11,7 @@ const tools = require("./tools.js")
 
 //routes
 
-app.get("/",async function(req, res) {
-    
+app.get("/",async function(req, res) {    
     var imageURLs = await tools.getRandomImages("",1);
     res.render("index", {"imageURLs":imageURLs});
 });
@@ -27,6 +26,7 @@ app.get("/search",async function(req, res) {
 
 
 app.get("/displayKeywords",async function(req, res) {
+    var imageURLs = await tools.getRandomImages("",1);
     var sql;
     var sqlParams;
     var conn = tools.createConnection();
@@ -35,7 +35,7 @@ app.get("/displayKeywords",async function(req, res) {
         if(err) throw(err);
             conn.query(sql,function(err,results) {
                 if(err) throw(err);
-                res.render("favorites", {"rows":results});
+                res.render("favorites", {"imageURLs": imageURLs, "rows":results});
         });
     });
 });
