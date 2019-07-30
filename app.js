@@ -16,7 +16,7 @@ app.get("/",async function(req, res) {
     var imageURLs = await tools.getRandomImages("",1);
     res.render("index", {"imageURLs":imageURLs});
 });
- 
+
 
 app.get("/search",async function(req, res) {
     var keyword = req.query.keyword;
@@ -25,6 +25,31 @@ app.get("/search",async function(req, res) {
     res.render("results", {"imageURLs": imageURLs, "keyword": keyword}); 
 });
 
+app.get("/api/updateFavorites",function(req, res) {
+    var imageURL = req.query.imageURL;
+    var keyword = req.query.keyword;
+    var action = req.query.action;
+
+    var sql;
+    var sqlParams;
+    var conn = mysql.createConnection({host:"localhost", user: "root", password:"3UaIr2cyEPJD81u", database: "img_gallery"});
+    if(action=="add") {
+        sql = "INSERT INTO favorites (imageURL, keyword) VALUES(?,?)";
+        sqlParams = [imageURL,keyword];
+    }
+    else {
+        sql = "DELETE FROM favorites WHERE imageURL = ?";
+        sqlParams = [imageURL];
+    }
+    conn.connect(function(err) {
+        if(err) throw(err);
+        conn.query(sql,sqlParams,function(err,results) {
+        res.send("cool!");
+        });
+    });
+    
+});
+ 
 
 //listener
 app.listen('8081',"0.0.0.0", function() {
