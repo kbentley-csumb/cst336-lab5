@@ -56,11 +56,22 @@ getRandomImages: function (keyword, imageCount) {
 },
 
 createConnection: function() {
+
+    /*
     var conn = mysql.createConnection({
         host:"localhost", 
         user: "root", 
         password:"3UaIr2cyEPJD81u", 
         database: "img_gallery"});
+    
+    */
+   var conn = mysql.createConnection({
+    host: 'us-cdbr-iron-east-02.cleardb.net',
+    user: 'bf9fc77cbb1951',
+    password: '120cb049',
+    database: 'heroku_56dd98c7982ac16'
+    });
+
     return conn;
 }
 

@@ -84,7 +84,8 @@ app.get("/api/updateFavorites",function(req, res) {
  
 
 //listener
-app.listen('8081',"0.0.0.0", function() {
+// '8081',"0.0.0.0"
+app.listen(process.env.PORT,process.env.IP, function() {
     console.log("Express Server is Running...");
 });
 
