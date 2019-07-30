@@ -65,11 +65,14 @@ createConnection: function() {
         database: "img_gallery"});
     
     */
+
+    //process.env
+
    var conn = mysql.createConnection({
-    host: 'us-cdbr-iron-east-02.cleardb.net',
-    user: 'bf9fc77cbb1951',
-    password: '120cb049',
-    database: 'heroku_56dd98c7982ac16'
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
     });
 
     return conn;
